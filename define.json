@@ -1,0 +1,6 @@
+{
+  "api": {
+    "port_dev": 1337,
+    "port_prod": 80
+  }
+}
