@@ -104,6 +104,7 @@ Run as root `./install.sh` to create custom cmd-shortcut.
  * `<cmd>` lists apps, apps tasks, root tasks, checks consistency
  * `<cmd> run <task>` runs task given
  * `<cmd> app <name>` bootstraps empty app in apps folder
+ * `<cmd> util <util>` runs util from `utils.json`
 
 ### Writing app tasks
 
