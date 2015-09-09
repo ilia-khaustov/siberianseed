@@ -17,6 +17,7 @@ PATH_UTILS = 'utils.json'
 seed = sys.argv[1]
 route = sys.argv[2] if len(sys.argv) > 2 else None
 param_one = sys.argv[3] if len(sys.argv) > 3 else None
+param_two = sys.argv[4] if len(sys.argv) > 4 else None
 define = {}
 taskmap = {}
 apps = []
@@ -121,7 +122,6 @@ print_if(True, '')
 
 print_if(print_apps, " @%s Apps List " % seed)
 print_if(print_apps, '----------------')
-
 apps = filter(None, [dir if os.path.isdir(DIR_APPS + '/' + dir) else None for dir in os.listdir(DIR_APPS)])
 for app in apps:
   print_if(print_apps, app)
@@ -133,7 +133,6 @@ print_if(print_apps, '')
 
 print_if(print_tasks, " @%s Task Map " % seed)
 print_if(print_tasks, '---------------')
-
 for root_task, subtasks in taskmap.items():
   errors = []
   for subtask in subtasks:
@@ -148,7 +147,6 @@ for root_task, subtasks in taskmap.items():
         )
         if len(tasks_not_found) > 0:
           errors.append(' ERROR [' + app + '] Tasks not found: ' + ', '.join(tasks_not_found))
-
   if len(errors) > 0:
     print_if(print_tasks, '' + root_task + ' - NOT OK!')
     for error in errors:
@@ -158,16 +156,32 @@ for root_task, subtasks in taskmap.items():
 print_if(print_tasks, '--------')
 print_if(print_tasks, '')
 
-if route == 'app' and param_one:
+if route == 'app' and param_one and not param_two:
   app = param_one
   if os.path.exists(DIR_APPS + '/' + app):
-    print_if(print_errors, ' ERROR ['+app+'] Destination exists.')
+    print(app)
+    apps_tasks[app] = list_app_tasks(app)
+    for task in apps_tasks[app]:
+      print(' > ' + task)
     exit()
   os.makedirs('/'.join([DIR_APPS, app, DIR_APP_BIN]))
   os.makedirs('/'.join([DIR_APPS, app, DIR_APP_SRC]))
   os.makedirs('/'.join([DIR_APPS, app, DIR_APP_SHARE]))
   print(' > App created: ' + param_one)
   print('')
+
+if route == 'app' and param_one and param_two:
+  app = param_one
+  if os.path.exists(DIR_APPS + '/' + app):
+    task = param_two
+    if os.path.exists('/'.join([DIR_APPS, app, DIR_APP_BIN, task + '.sh'])):
+      subtask = {}
+      subtask[app] = [task]
+      execute(subtask)
+    else:
+      print_if(print_errors, ' ERROR ['+app+'] Task doesn\'t exist: ' + task)
+  else:
+    print_if(print_errors, ' ERROR [INPUT] App doesn\'t exist: ' + app)
 
 if route == 'run' and param_one:
   task = param_one
