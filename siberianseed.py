@@ -84,7 +84,7 @@ def execute(apptasks):
       prefix.append('app_%s="%s/%s/%s/%s"' % (_app, os.getcwd(), DIR_APPS, _app, DIR_APP_SHARE))
     for variable, value in define.get(app, {}).items():
       prefix.append('%s="%s"' % (variable, value))
-    prefix.append('cd %s/%s/%s/%s' % (os.getcwd(), DIR_APPS, app, DIR_APP_SHARE))
+    prefix.append('cd %s/%s/%s/%s' % (os.getcwd(), DIR_APPS, app, DIR_APP_SRC))
     jobs.append(mp.Process(
       target=run,
       args=(app, tasks, prefix)
