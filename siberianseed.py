@@ -126,6 +126,8 @@ apps = filter(None, [dir if os.path.isdir(DIR_APPS + '/' + dir) else None for di
 for app in apps:
   print_if(print_apps, app)
   apps_tasks[app] = list_app_tasks(app)
+  if not os.path.exists('/'.join([DIR_APPS, app, DIR_APP_SHARE])):
+    os.makedirs('/'.join([DIR_APPS, app, DIR_APP_SHARE]))
   for task in apps_tasks[app]:
     print_if(print_apps, ' > ' + task)
 print_if(print_apps, '--------')
