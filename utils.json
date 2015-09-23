@@ -1,3 +1,4 @@
 {
-  "ls": "cd apps; ls -lah"
+  "ls": "cd apps; ls -lah",
+  "env": "rm define.json; cp define.`echo $arg`.json define.json"
 }

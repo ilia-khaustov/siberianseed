@@ -5,6 +5,9 @@ import os
 import json
 import multiprocessing as mp
 import subprocess
+import signal
+
+signal.signal(signal.SIGINT, lambda x,y: sys.exit(128 + signal.SIGINT))
 
 DIR_APPS = 'apps'
 DIR_APP_BIN = 'bin'
@@ -101,15 +104,15 @@ print_tasks = True
 
 if not route:
   pass
-elif route == 'app':
+elif route == 'a':
   print_tasks = False
   if param_one:
     print_apps = False
-elif route == 'run':
+elif route == 'r':
   print_apps = False
   if param_one:
     print_tasks = False
-elif route == 'util':
+elif route == 'u':
   print_apps = False
   print_tasks = False
 else:
@@ -158,7 +161,7 @@ for root_task, subtasks in taskmap.items():
 print_if(print_tasks, '--------')
 print_if(print_tasks, '')
 
-if route == 'app' and param_one and not param_two:
+if route == 'a' and param_one and not param_two:
   app = param_one
   if os.path.exists(DIR_APPS + '/' + app):
     print(app)
@@ -172,7 +175,7 @@ if route == 'app' and param_one and not param_two:
   print(' > App created: ' + param_one)
   print('')
 
-if route == 'app' and param_one and param_two:
+if route == 'a' and param_one and param_two:
   app = param_one
   if os.path.exists(DIR_APPS + '/' + app):
     task = param_two
@@ -185,7 +188,7 @@ if route == 'app' and param_one and param_two:
   else:
     print_if(print_errors, ' ERROR [INPUT] App doesn\'t exist: ' + app)
 
-if route == 'run' and param_one:
+if route == 'r' and param_one:
   task = param_one
   subtasks = taskmap.get(task, [])
   for sub in subtasks:
@@ -197,8 +200,10 @@ if route == 'run' and param_one:
     elif isinstance(sub, dict):
       execute(sub)
 
-if route == 'util' and param_one:
+if route == 'u' and param_one:
   util_src = utils.get(param_one, '')
+  if param_two:
+    util_src = 'arg=' + param_two + '; ' + util_src
   child = subprocess.Popen(util_src, shell=True)
   child.communicate()
   if child.returncode is not 0:

@@ -102,12 +102,12 @@ Run as root `./install.sh` to create custom cmd-shortcut.
 ### Common commands
 
  * `<cmd>` lists apps, apps tasks, root tasks, checks consistency
- * `<cmd> run` shows available root tasks (from map.json)
- * `<cmd> run <task>` runs root task (from map.json)
- * `<cmd> app` shows apps and their tasks
- * `<cmd> app <app>` bootstraps empty app in apps folder or shows existing app
- * `<cmd> app <app> <task>` runs app task (from `bin` folder)
- * `<cmd> util <util>` runs util from `utils.json`
+ * `<cmd> r` shows available root tasks (from map.json)
+ * `<cmd> r <task>` runs root task (from map.json)
+ * `<cmd> a` shows apps and their tasks
+ * `<cmd> a <app>` bootstraps empty app in apps folder or shows existing app
+ * `<cmd> a <app> <task>` runs app task (from `bin` folder)
+ * `<cmd> u <util> [[<arg1>] <arg2>]` runs util from `utils.json`
 
 ### Writing app tasks
 
@@ -133,4 +133,5 @@ They will be injected in shell scripts for *api* app as `$port_dev` and `$port_p
 
 ### Running utils
 
-You can add often used shell commands to utils.json and run them with `<cmd> util <util>`.
+You can add often used shell commands to utils.json and run them with `<cmd> u <util> [<arg>]`.
+Argument passed is available as `$arg`.
