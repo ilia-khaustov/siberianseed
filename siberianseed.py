@@ -73,19 +73,24 @@ def run(app, tasks, prefix):
   print('Running [' + app + ']: ' + json.dumps(tasks))
 
   for task in tasks:
-    shell_src = prefix + open('/'.join([DIR_APPS, app, DIR_APP_BIN, task + '.sh'])).readlines()
-    child = subprocess.Popen('\n'.join(shell_src), shell=True)
+    cmd_lines = prefix + open('/'.join([DIR_APPS, app, DIR_APP_BIN, task + '.sh'])).readlines()
+    child = subprocess.Popen('\n'.join(cmd_lines), shell=True)
     child.communicate()
     if child.returncode is not 0:
       print_if(print_errors, ' ERROR [%s] %s: returned code %s' % (app, task, str(child.returncode)))
 
+def _predefined():
+  expressions = []
+  expressions.append('%s="%s"' % ('root', os.getcwd()))
+  for _app in apps:
+    expressions.append('share_%s="%s/%s/%s/%s"' % (_app, os.getcwd(), DIR_APPS, _app, DIR_APP_SHARE))
+    expressions.append('src_%s="%s/%s/%s/%s"' % (_app, os.getcwd(), DIR_APPS, _app, DIR_APP_SRC))
+  return expressions
+
 def execute(apptasks):
   jobs = []
   for app, tasks in apptasks.items():
-    prefix = []
-    prefix.append('%s="%s"' % ('root', os.getcwd()))
-    for _app in apps:
-      prefix.append('app_%s="%s/%s/%s/%s"' % (_app, os.getcwd(), DIR_APPS, _app, DIR_APP_SHARE))
+    prefix = _predefined()
     for variable, value in define.get(app, {}).items():
       prefix.append('%s="%s"' % (variable, value))
     prefix.append('cd %s/%s/%s/%s' % (os.getcwd(), DIR_APPS, app, DIR_APP_SRC))
@@ -201,10 +206,11 @@ if route == 'r' and param_one:
       execute(sub)
 
 if route == 'u' and param_one:
-  util_src = utils.get(param_one, '')
+  cmd_lines = _predefined()
   if param_two:
-    util_src = 'arg=' + param_two + '; ' + util_src
-  child = subprocess.Popen(util_src, shell=True)
+    cmd_lines.append('arg=' + param_two)
+  cmd_lines.append(utils.get(param_one))
+  child = subprocess.Popen('\n'.join(cmd_lines), shell=True)
   child.communicate()
   if child.returncode is not 0:
     print_if(print_errors, ' ERROR [UTIL] %s: returned code %s' % (param_one, str(child.returncode)))

@@ -1,4 +1,5 @@
 {
   "ls": "cd apps; ls -lah",
-  "env": "rm define.json; cp define.`echo $arg`.json define.json"
+  "env": "rm define.json; cp define.`echo $arg`.json define.json",
+  "help": "printf \"\n`cat README*`\n\" | less -F"
 }

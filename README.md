@@ -95,7 +95,7 @@ Using
 
 ### Installing
 
-Run as root `./install.sh` to create custom cmd-shortcut.
+Run as root `sh ./install.sh` to create custom cmd-shortcut.
 
 **Tip**: reinstall if seed directory changes
 
@@ -107,7 +107,7 @@ Run as root `./install.sh` to create custom cmd-shortcut.
  * `<cmd> a` shows apps and their tasks
  * `<cmd> a <app>` bootstraps empty app in apps folder or shows existing app
  * `<cmd> a <app> <task>` runs app task (from `bin` folder)
- * `<cmd> u <util> [[<arg1>] <arg2>]` runs util from `utils.json`
+ * `<cmd> u <util> <arg>` runs util from `utils.json` with a given arg
 
 ### Writing app tasks
 
@@ -116,7 +116,8 @@ Each app task is a shell script that runs from app's src folder.
 Task has default predefined variables:
 
  * `$root` - root-project absolute file path
- * `$app_{name}` - "$root"/apps/{name}/share
+ * `$share_{name}` - "$root"/apps/{name}/share
+ * `$src_{name}` - "$root"/apps/{name}/src
 
 Additional variables can be added via define.json:
 
@@ -134,4 +135,9 @@ They will be injected in shell scripts for *api* app as `$port_dev` and `$port_p
 ### Running utils
 
 You can add often used shell commands to utils.json and run them with `<cmd> u <util> [<arg>]`.
-Argument passed is available as `$arg`.
+Default predefined variables:
+
+ * `$arg` - argument passed is available as `$arg`.
+ * `$root` - root-project absolute file path
+ * `$share_{name}` - "$root"/apps/{name}/share
+ * `$src_{name}` - "$root"/apps/{name}/src
