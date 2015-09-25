@@ -218,7 +218,7 @@ if route == 'u' and param_one:
   cmd_lines = _predefined()
   if param_two:
     cmd_lines.append('arg=' + param_two)
-  cmd_lines.extend(utils.get(param_one))
+  cmd_lines.extend(utils.get(param_one, []))
   
   print(' Executing:')
   print('')
