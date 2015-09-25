@@ -16,7 +16,7 @@ SiberianSeed consists of:
   * **define.json** - user-defined shell variables for tasks
   * **utils.json** - fast access to useful shell commands
   * **siberianseed.py** - interactive tool for project administration
-  * **install.sh** - installation script that creates a custom shortcut for siberianseed.py
+  * **install** - installation script that creates a custom shortcut for siberianseed.py
 
 
 ```
@@ -32,7 +32,7 @@ siberianseed
 ├── tasks.json
 ├── define.json
 ├── siberianseed.py
-├── install.sh
+├── install
 └── .gitignore
 ```
 
@@ -104,8 +104,8 @@ Run as root `./install` to create custom cmd-shortcut.
 ### Common commands
 
  * `<cmd>` lists apps, apps tasks, root tasks, checks consistency
- * `<cmd> r` shows available root tasks (from map.json)
- * `<cmd> r <task>` runs root task (from map.json)
+ * `<cmd> r` shows available root tasks (from `map.json`)
+ * `<cmd> r <task>` runs root task (from `map.json`)
  * `<cmd> a` shows apps and their tasks
  * `<cmd> a <app>` bootstraps empty app in apps folder or shows existing app
  * `<cmd> a <app> <task>` runs app task (from `bin` folder)
@@ -114,6 +114,8 @@ Run as root `./install` to create custom cmd-shortcut.
 ### Writing app tasks
 
 Each app task is a shell script that runs from app's src folder.
+
+> Interpreter is `sh` by default as it is widely supported. You can change default interpreter in `siberianseed.py`. Check out `subprocess` module in Python documentation for details.
 
 Task has default predefined variables:
 
@@ -136,8 +138,8 @@ They will be injected in shell scripts for *api* app as `$port_dev` and `$port_p
 
 ### Running utils
 
-You can add often used shell commands to utils.json and run them with `<cmd> u <util> [<arg>]`.
-Default predefined variables:
+You can add often used shell commands to `utils.json` and run them with `<cmd> u <util> [<arg>]`.
+Following predefined variables are accessible in util scripts:
 
  * `$arg` - argument passed is available as `$arg`.
  * `$root` - root-project absolute file path
@@ -149,7 +151,7 @@ A number of utils is included by default:
  * `<cmd> u help` - prints all files matching `README*` mask with scrolling enabled.
  * `<cmd> u ls <arg>` - searches for a predefined variable which name equals `<arg>` and uses its value as an argument for `ls -lah`. If no argument given or no variable found - executes `ls -lah` without argument.
  * `<cmd> u echo <arg>` - prints value of a variable if it was predefined.
- * `<cmd> u env <arg>` - replaces `define.json` with `define.<arg>.json` if it exists.
+ * `<cmd> u env <arg>` - replaces `define.json` with `define.<arg>.json` if this non-empty file exists in a root project directory.
 
 ### Tips and tricks
 
