@@ -11,7 +11,7 @@ while true; do
       cmd="#!/bin/sh \n \n
       cd $SCRIPTPATH \n
       python3 siberianseed.py $SEED \$* \n
-      echo; exit 0"
+      echo;"
       echo $cmd > "/usr/local/bin/$SEED"
       chmod 777 "/usr/local/bin/$SEED"
       break;

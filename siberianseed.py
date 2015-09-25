@@ -63,7 +63,7 @@ def list_app_tasks(app):
     return []
   return map(
     lambda s: s[0:-3], 
-    filter(
+    list(filter(
       None, 
       [
         taskfile 
@@ -71,7 +71,7 @@ def list_app_tasks(app):
         else None 
         for taskfile in os.listdir(dir_bin)
       ]
-    )
+    ))
   )
 
 def print_if(condition, str):
@@ -161,10 +161,10 @@ for root_task, subtasks in taskmap.items():
         errors.append(' ERROR [TASKMAP] Task not found: ' + subtask)
     elif isinstance(subtask, dict):
       for app, app_tasks in subtask.items():
-        tasks_not_found = filter(
+        tasks_not_found = list(filter(
           None, 
           [task if task not in apps_tasks.get(app, []) else None for task in app_tasks]
-        )
+        ))
         if len(tasks_not_found) > 0:
           errors.append(' ERROR [' + app + '] Tasks not found: ' + ', '.join(tasks_not_found))
   if len(errors) > 0:
