@@ -97,7 +97,7 @@ Using
 
 ### Installing
 
-Run as root `sh ./install.sh` to create custom cmd-shortcut.
+Run as root `./install` to create custom cmd-shortcut.
 
 **Tip**: reinstall if seed directory changes
 
@@ -143,3 +143,16 @@ Default predefined variables:
  * `$root` - root-project absolute file path
  * `$share_{name}` - "$root"/apps/{name}/share
  * `$src_{name}` - "$root"/apps/{name}/src
+
+A number of utils is included by default:
+ 
+ * `<cmd> u help` - prints all files matching `README*` mask with scrolling enabled.
+ * `<cmd> u ls <arg>` - searches for a predefined variable which name equals `<arg>` and uses its value as an argument for `ls -lah`. If no argument given or no variable found - executes `ls -lah` without argument.
+ * `<cmd> u echo <arg>` - prints value of a variable if it was predefined.
+ * `<cmd> u env <arg>` - replaces `define.json` with `define.<arg>.json` if it exists.
+
+### Tips and tricks
+
+ * To get value of predefined variable in util script use `eval val=\$$arg;` expression. It is supported by `sh` and other interpreters. Using `val=${!arg}` expression will break execution as it is supported only by modern shells like `bash`.
+ * Change current directory to a project directory with a short command: `. <cmd>`.
+

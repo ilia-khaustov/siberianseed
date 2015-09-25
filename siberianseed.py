@@ -33,19 +33,28 @@ if not os.path.exists(DIR_APPS):
 if os.path.exists(PATH_DEFINE):
   handle = open(PATH_DEFINE)
   define_str = handle.read()
-  define = json.loads(define_str)
+  try:
+    define = json.loads(define_str)
+  except:
+    pass
   handle.close()
 
 if os.path.exists(PATH_MAP):
   handle = open(PATH_MAP)
   taskmap_str = handle.read()
-  taskmap = json.loads(taskmap_str)
+  try:
+    taskmap = json.loads(taskmap_str)
+  except:
+    pass
   handle.close()
 
 if os.path.exists(PATH_UTILS):
   handle = open(PATH_UTILS)
   utils_str = handle.read()
-  utils = json.loads(utils_str)
+  try:
+    utils = json.loads(utils_str)
+  except:
+    pass
   handle.close()
 
 def list_app_tasks(app):
@@ -74,7 +83,7 @@ def run(app, tasks, prefix):
 
   for task in tasks:
     cmd_lines = prefix + open('/'.join([DIR_APPS, app, DIR_APP_BIN, task + '.sh'])).readlines()
-    child = subprocess.Popen('\n'.join(cmd_lines), shell=True)
+    child = subprocess.Popen('\n'.join(cmd_lines), shell=True, stderr=subprocess.STDOUT)
     child.communicate()
     if child.returncode is not 0:
       print_if(print_errors, ' ERROR [%s] %s: returned code %s' % (app, task, str(child.returncode)))
@@ -129,20 +138,21 @@ print_if(True, ' # %s Management Console # ' % seed)
 print_if(True, '')
 
 print_if(print_apps, " @%s Apps List " % seed)
-print_if(print_apps, '----------------')
-apps = filter(None, [dir if os.path.isdir(DIR_APPS + '/' + dir) else None for dir in os.listdir(DIR_APPS)])
+print_if(print_apps, ' ----------------')
+apps = list(filter(None, 
+  [dir if os.path.isdir(DIR_APPS + '/' + dir) else None for dir in os.listdir(DIR_APPS)]
+))
 for app in apps:
-  print_if(print_apps, app)
+  print_if(print_apps, ' ' + app)
   apps_tasks[app] = list_app_tasks(app)
   if not os.path.exists('/'.join([DIR_APPS, app, DIR_APP_SHARE])):
     os.makedirs('/'.join([DIR_APPS, app, DIR_APP_SHARE]))
   for task in apps_tasks[app]:
     print_if(print_apps, ' > ' + task)
-print_if(print_apps, '--------')
 print_if(print_apps, '')
 
 print_if(print_tasks, " @%s Task Map " % seed)
-print_if(print_tasks, '---------------')
+print_if(print_tasks, ' ---------------')
 for root_task, subtasks in taskmap.items():
   errors = []
   for subtask in subtasks:
@@ -158,12 +168,11 @@ for root_task, subtasks in taskmap.items():
         if len(tasks_not_found) > 0:
           errors.append(' ERROR [' + app + '] Tasks not found: ' + ', '.join(tasks_not_found))
   if len(errors) > 0:
-    print_if(print_tasks, '' + root_task + ' - NOT OK!')
+    print_if(print_tasks, ' ' + root_task + ' - NOT OK!')
     for error in errors:
       print_if(print_errors, error)
   else:
-    print_if(print_tasks, root_task + ' - OK')
-print_if(print_tasks, '--------')
+    print_if(print_tasks, ' ' + root_task + ' - OK')
 print_if(print_tasks, '')
 
 if route == 'a' and param_one and not param_two:
@@ -209,8 +218,14 @@ if route == 'u' and param_one:
   cmd_lines = _predefined()
   if param_two:
     cmd_lines.append('arg=' + param_two)
-  cmd_lines.append(utils.get(param_one))
-  child = subprocess.Popen('\n'.join(cmd_lines), shell=True)
+  cmd_lines.extend(utils.get(param_one))
+  
+  print(' Executing:')
+  print('')
+  print(' ' + '\n '.join(cmd_lines))
+  print('')
+
+  child = subprocess.Popen('\n'.join(cmd_lines), shell=True, stderr=subprocess.STDOUT)
   child.communicate()
   if child.returncode is not 0:
     print_if(print_errors, ' ERROR [UTIL] %s: returned code %s' % (param_one, str(child.returncode)))
