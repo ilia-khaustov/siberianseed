@@ -61,7 +61,7 @@ def list_app_tasks(app):
   dir_bin = '/'.join([DIR_APPS, app, DIR_APP_BIN])
   if not os.path.exists(dir_bin):
     return []
-  return map(
+  return list(map(
     lambda s: s[0:-3], 
     list(filter(
       None, 
@@ -72,7 +72,7 @@ def list_app_tasks(app):
         for taskfile in os.listdir(dir_bin)
       ]
     ))
-  )
+  ))
 
 def print_if(condition, str):
   if condition:
