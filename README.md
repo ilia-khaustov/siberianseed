@@ -3,6 +3,8 @@ SiberianSeed
 
 **Boilerplate for modular development** *from Siberia with love* ![Bear says hello](https://dl.dropboxusercontent.com/u/45499397/bear_says_hello.jpg)
 
+You would like to see one of my related projects - template for a single SiberianSeed app that gives better understanding of SiberianSeed awesomeness - [siberianseed-app](https://github.com/ilya-khaustov/siberianseed-app).
+
 Overview
 --------
 
