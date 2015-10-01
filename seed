@@ -1,0 +1,50 @@
+#!/bin/sh
+
+SEED_FILE=$(readlink -f "$0");
+SEED_PATH=$(dirname "$SEED_FILE");
+SEED_ARG_PREV='';
+SEED_NAME='';
+SEED_NEW='';
+chmod -R +x bin;
+mkdir -p share;
+mkdir -p src;
+
+for SEED_ARG in "$@"; do
+  if [ "$SEED_ARG_PREV" = '--name' ]; then
+    SEED_NAME="$SEED_ARG";
+    SEED_ARG_PREV='';
+  elif [ "$SEED_ARG_PREV" = '--owner' ]; then
+    SEED_OWNER="$SEED_ARG";
+    SEED_ARG_PREV='';
+  elif [ "$SEED_ARG_PREV" = '--new' ]; then
+    SEED_NEW="$SEED_ARG";
+    SEED_ARG_PREV='';
+  elif [ $(echo "$SEED_ARG" | cut -c1) = '/' ]; then
+    echo "Running: $SEED_PATH/bin/$SEED_ARG_PREV$SEED_ARG.sh"; echo;
+    root="$SEED_PATH" "$SEED_PATH/bin/$SEED_ARG_PREV$SEED_ARG.sh"; echo;
+  elif [ -f "$SEED_PATH/bin/$SEED_ARG.sh" ]; then
+    echo "Running: $SEED_PATH/bin/$SEED_ARG.sh"; echo;
+    root="$SEED_PATH" "$SEED_PATH/bin/$SEED_ARG.sh"; echo;
+    SEED_ARG_PREV="";
+  else
+    SEED_ARG_PREV="$SEED_ARG";
+  fi
+done
+if [ -n "$SEED_NEW" ]; then 
+  echo "Creating shortcut: /usr/local/bin/$SEED_NEW";
+  echo "#!/bin/sh \n\n cd $SEED_PATH && ./seed --name '$SEED_NEW' \$@;" > "/usr/local/bin/$SEED_NEW";
+  SEED_NAME="$SEED_NEW";
+  chmod +x "/usr/local/bin/$SEED_NAME";
+fi
+if [ -n "$SEED_OWNER" ]; then
+  if [ -z "$SEED_NAME" ]; then
+    echo "Seed name not provided, owner not set";
+  else
+    echo "Set owner: $SEED_OWNER";
+    SEED_OWNER_GROUP=$(groups "$SEED_OWNER" | sed -r 's/.*: //g' | sed -r 's/ .*//g');
+    echo "Set owner group: $SEED_OWNER_GROUP";
+    chown -R "$SEED_OWNER":"$SEED_OWNER_GROUP" "$SEED_PATH";
+    chown "$SEED_OWNER":"$SEED_OWNER_GROUP" "/usr/local/bin/$SEED_NAME";
+  fi
+fi
+echo 'Finished';

@@ -1,160 +1,47 @@
 SiberianSeed
 ============
 
-**Boilerplate for modular development** *from Siberia with love* ![Bear says hello](https://dl.dropboxusercontent.com/u/45499397/bear_says_hello.jpg)
-
-You would like to see one of my related projects - template for a single SiberianSeed app that gives better understanding of SiberianSeed awesomeness - [siberianseed-app](https://github.com/ilya-khaustov/siberianseed-app).
-
-Overview
---------
-
-SiberianSeed consists of:
-  
-  * **.** - root-project
-  * **apps** - self-sufficient projects built into the root-project as modules
-  * **tasks.json** - router configuration for running root tasks
-  * **define.json** - user-defined shell variables for tasks
-  * **utils.json** - fast access to useful shell commands
-  * **siberianseed.py** - interactive tool for project administration
-  * **install** - installation script that creates a custom shortcut for siberianseed.py
+**Minimalistic template for modular development** *from Siberia with love*
 
 
-```
-siberianseed
-├── apps
-│   ├── sampleApp
-│   │   ├── src
-│   │   ├── bin
-│   │   └── share
-│   └── ...
-│   ...
-│
-├── tasks.json
-├── define.json
-├── siberianseed.py
-├── install
-└── .gitignore
-```
+Say hello ![Bear says hello](https://dl.dropboxusercontent.com/u/45499397/bear_says_hello.jpg)
+---------
 
-### apps
 
-Each app has unique name and predefined folder structure to one level.
 
-#### app/src
+SiberianSeed is probably the simpliest template ever.
 
-Container for an application without predefined structure or shared dependencies. Developer is free to choose his favourite language, framework, compilers and build/testing/linting/whatevering systems inside this folder.
+**50** lines of a `seed` script will turn your development routine into a fairy tale.
 
-#### app/bin
 
-Shell scripts that are executed inside app **src** directory.
+Start using
+-----------
 
-#### app/share
+ 1. `git clone git@github.com:ilya-khaustov/siberianseed.git myApp && cd myApp`
+ 1. `sudo ./seed --new myApp --owner $(whoami)` Name your project and set a project owner.
+ 1. `echo 'printf "Hello world!";' > bin/hello.sh` Create a task.
+ 1. `myApp hello` Execute a task.
 
-Compiled source, binaries, generated data or other files that should be shared to other apps. File structure is defined by team convention. Share folders are included in .gitignore: `apps/*/share/**`.
 
-### tasks.json
+Go deeper
+---------
 
-Routing to apps tasks is straight-forward.
+ 1. `mkdir bin/say`
+ 1. `echo 'printf "Bye $root!";' > bin/say/bye.sh` Variable `$root` is predefined. It contains absolute path of a project.
+ 1. `myApp say /bye` Slash-prefixed argument executes from `bin` subdirectory given as previous non-prefixed argument.
+ 1. `myApp hello say /bye` Execute a sequence.
+ 1. `myApp say /bye hello` Omit slash and execute directly from `bin`.
+ 1. `mv bin/hello.sh bin/say/hello.sh`
+ 1. `myApp say /hello /bye` This way it looks more consistent.
 
-```
-{
 
-  "build": [
-  
-    // subtask consists of one or more app tasks which run concurrently
-    { 
-      // runner looks for apps/api/bin/install.sh script
-      // script is executed inside apps/api/src folder
-      // if return code is not 0 execution breaks with error
-      "api": ["install"],
-      "website": ["install"]
-    },
-    
-    // every subtask waits for previous subtasks to finish
-    { 
-      "api": ["configure", "migrate"],
-      "website": ["configure", "minify"]
-    }
+Tips and tricks
+---------------
 
-  ],
-
-  "serve": [
-
-    // subtask can refer to existing root task
-    "build",
-
-    { "api": ["serve"] },
-
-    { "website": ["serve"] }
-
-  ]
-  
-}
-```
-
-Using
------
-
-### Installing
-
-Run as root `./install` to create custom cmd-shortcut.
-
-**Tip**: reinstall if seed directory changes
-
-### Common commands
-
- * `<cmd>` lists apps, apps tasks, root tasks, checks consistency
- * `<cmd> r` shows available root tasks (from `map.json`)
- * `<cmd> r <task>` runs root task (from `map.json`)
- * `<cmd> a` shows apps and their tasks
- * `<cmd> a <app>` bootstraps empty app in apps folder or shows existing app
- * `<cmd> a <app> <task>` runs app task (from `bin` folder)
- * `<cmd> u <util> <arg>` runs util from `utils.json` with a given arg
-
-### Writing app tasks
-
-Each app task is a shell script that runs from app's src folder.
-
-> Interpreter is `sh` by default as it is widely supported. You can change default interpreter in `siberianseed.py`. Check out `subprocess` module in Python documentation for details.
-
-Task has default predefined variables:
-
- * `$root` - root-project absolute file path
- * `$share_{name}` - "$root"/apps/{name}/share
- * `$src_{name}` - "$root"/apps/{name}/src
-
-Additional variables can be added via define.json:
-
-```
-{
-  "api": {
-    "port_dev": 1337,
-    "port_prod": 80
-  }
-}
-```
-
-They will be injected in shell scripts for *api* app as `$port_dev` and `$port_prod`.
-
-### Running utils
-
-You can add often used shell commands to `utils.json` and run them with `<cmd> u <util> [<arg>]`.
-Following predefined variables are accessible in util scripts:
-
- * `$arg` - argument passed is available as `$arg`.
- * `$root` - root-project absolute file path
- * `$share_{name}` - "$root"/apps/{name}/share
- * `$src_{name}` - "$root"/apps/{name}/src
-
-A number of utils is included by default:
- 
- * `<cmd> u help` - prints all files matching `README*` mask with scrolling enabled.
- * `<cmd> u ls <arg>` - searches for a predefined variable which name equals `<arg>` and uses its value as an argument for `ls -lah`. If no argument given or no variable found - executes `ls -lah` without argument.
- * `<cmd> u echo <arg>` - prints value of a variable if it was predefined.
- * `<cmd> u env <arg>` - replaces `define.json` with `define.<arg>.json` if this non-empty file exists in a root project directory.
-
-### Tips and tricks
-
- * To get value of predefined variable in util script use `eval val=\$$arg;` expression. It is supported by `sh` and other interpreters. Using `val=${!arg}` expression will break execution as it is supported only by modern shells like `bash`.
- * Change current directory to a project directory with a short command: `. <cmd>`.
-
+ * Type `. myApp` and `cd` to project root directory.
+ * `myApp` redirects arguments to the `seed` script with additional `--name` argument. Executing `./seed --name myApp` from a project root is exactly the same as `myApp`.
+ * Task name can include spaces. `myApp 'make a sandwich'` looks for `make a sandwich.sh` file inside a `bin` directory.
+ * If project is moved to another directory the `seed` shortcut (`myApp` in this README) stops working. Execute `sudo ./seed --new myApp --owner $(whoami)` once again to fix it.
+ * Tasks from a sequence are executed inside their child processes and can't interact with each other using shell variables or pipes. Tasks are supposed to interact through `share` directory. It is auto-created if not found on every task run. Save temporary data like logs, pid files or exported distributions inside `share` and access it later in subsequent tasks.
+ * Pay attention to the `--owner` argument. It is strongly discouraged to make `root` a project owner. First, it is unsafe to run software like `bower` or `npm` with root privelegies. Second, files and folders created or processes started by root cause access errors when running tasks as a non-root user. Set project owner wisely to save your time and stay secure.
+ * Use shebangs in tasks.
