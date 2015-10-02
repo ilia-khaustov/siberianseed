@@ -45,3 +45,11 @@ Tips and tricks
  * Tasks from a sequence are executed inside their child processes and can't interact with each other using shell variables or pipes. Tasks are supposed to interact through `share` directory. It is auto-created if not found on every task run. Save temporary data like logs, pid files or exported distributions inside `share` and access it later in subsequent tasks.
  * Pay attention to the `--owner` argument. It is strongly discouraged to make `root` a project owner. First, it is unsafe to run software like `bower` or `npm` with root privelegies. Second, files and folders created or processes started by root cause access errors when running tasks as a non-root user. Set project owner wisely to save your time and stay secure.
  * Use shebangs in tasks.
+
+
+Batteries included!
+-------------------
+
+You could probably notice a bunch of files in the `bin` directory. Don't worry - they are only examples and `seed` doesn't depend on them. You can delete them in any moment if you feel right about it.
+
+This README is as basic as it can be to keep things simple and decisions unbiased. However, if you would like to know more about developing practices, you are welcome to use existing tasks.
