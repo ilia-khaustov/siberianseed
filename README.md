@@ -7,11 +7,9 @@ SiberianSeed
 Say hello ![Bear says hello](https://dl.dropboxusercontent.com/u/45499397/bear_says_hello.jpg)
 ---------
 
-
-
 SiberianSeed is probably the simpliest template ever.
 
-**50** lines of a `seed` script will turn your development routine into a fairy tale.
+> Main script has 50 lines of code (1.56 KB).
 
 
 Start using
@@ -52,4 +50,4 @@ Batteries included!
 
 You could probably notice a bunch of files in the `bin` directory. Don't worry - they are only examples and `seed` doesn't depend on them. You can delete them in any moment if you feel right about it.
 
-This README is as basic as it can be to keep things simple and decisions unbiased. However, if you would like to know more about developing practices, you are welcome to use existing tasks.
+This README is as basic as it can be to keep things simple and decisions unbiased. However, if you would like to know more about developing practices, you are welcome to explore and use existing tasks.
