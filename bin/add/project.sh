@@ -25,4 +25,5 @@ cd $newdir;
 sudo ./seed --new $newcmd --owner $(whoami);
 rm -rf .git;
 mv README.md SIBERIANSEED.md;
+rm LICENSE.md;
 echo "Project $newdir created successfully";
