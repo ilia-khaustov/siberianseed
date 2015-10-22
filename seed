@@ -1,13 +1,17 @@
 #!/bin/sh
 
 SEED_FILE=$(readlink -f "$0");
-SEED_PATH=$(dirname "$SEED_FILE");
+SEED_ROOT=$(dirname "$SEED_FILE");
+SEED_PWD=$(if [ -z "$SEED_PWD" ]; then echo "$SEED_ROOT"; else echo "$SEED_PWD"; fi)
 SEED_ARG_PREV='';
 SEED_NAME='';
 SEED_NEW='';
 chmod -R +x bin;
 mkdir -p share;
 mkdir -p src;
+
+export root="$SEED_ROOT";
+export userpwd="$SEED_PWD";
 
 for SEED_ARG in "$@"; do
   if [ "$SEED_ARG_PREV" = '--name' ]; then
@@ -20,11 +24,11 @@ for SEED_ARG in "$@"; do
     SEED_NEW="$SEED_ARG";
     SEED_ARG_PREV='';
   elif [ $(echo "$SEED_ARG" | cut -c1) = '/' ]; then
-    echo "Running: $SEED_PATH/bin/$SEED_ARG_PREV$SEED_ARG.sh"; echo;
-    root="$SEED_PATH" "$SEED_PATH/bin/$SEED_ARG_PREV$SEED_ARG.sh"; echo;
-  elif [ -f "$SEED_PATH/bin/$SEED_ARG.sh" ]; then
-    echo "Running: $SEED_PATH/bin/$SEED_ARG.sh"; echo;
-    root="$SEED_PATH" "$SEED_PATH/bin/$SEED_ARG.sh"; echo;
+    echo "Running: $SEED_ROOT/bin/$SEED_ARG_PREV$SEED_ARG.sh"; echo;
+    "$SEED_ROOT/bin/$SEED_ARG_PREV$SEED_ARG.sh"; echo;
+  elif [ -f "$SEED_ROOT/bin/$SEED_ARG.sh" ]; then
+    echo "Running: $SEED_ROOT/bin/$SEED_ARG.sh"; echo;
+    "$SEED_ROOT/bin/$SEED_ARG.sh"; echo;
     SEED_ARG_PREV="";
   else
     SEED_ARG_PREV="$SEED_ARG";
@@ -32,7 +36,11 @@ for SEED_ARG in "$@"; do
 done
 if [ -n "$SEED_NEW" ]; then 
   echo "Creating shortcut: /usr/local/bin/$SEED_NEW";
-  echo "#!/bin/sh \n\n cd $SEED_PATH && ./seed --name '$SEED_NEW' \$@;" > "/usr/local/bin/$SEED_NEW";
+  cmd_shebang="#!/bin/sh";
+  cmd_vars="export SEED_PWD=\$PWD";
+  cmd_cd="cd $SEED_ROOT";
+  cmd_exec="./seed --name '$SEED_NEW' \$@";
+  echo "$cmd_shebang\n\n$cmd_vars;\n$cmd_cd;\n$cmd_exec;" > "/usr/local/bin/$SEED_NEW";
   SEED_NAME="$SEED_NEW";
   chmod +x "/usr/local/bin/$SEED_NAME";
 fi
@@ -43,7 +51,7 @@ if [ -n "$SEED_OWNER" ]; then
     echo "Set owner: $SEED_OWNER";
     SEED_OWNER_GROUP=$(groups "$SEED_OWNER" | sed -r 's/.*: //g' | sed -r 's/ .*//g');
     echo "Set owner group: $SEED_OWNER_GROUP";
-    chown -R "$SEED_OWNER":"$SEED_OWNER_GROUP" "$SEED_PATH";
+    chown -R "$SEED_OWNER":"$SEED_OWNER_GROUP" "$SEED_ROOT";
     chown "$SEED_OWNER":"$SEED_OWNER_GROUP" "/usr/local/bin/$SEED_NAME";
   fi
 fi

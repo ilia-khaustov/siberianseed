@@ -11,7 +11,7 @@ Say hello ![Bear says hello](https://dl.dropboxusercontent.com/u/45499397/bear_s
 
 SiberianSeed is probably the simpliest template ever.
 
-**50** lines of a `seed` script will turn your development routine into a fairy tale.
+**58** lines of a `seed` script will turn your development routine into a fairy tale.
 
 
 Start using
@@ -33,6 +33,14 @@ Go deeper
  1. `myApp say /bye hello` Omit slash and execute directly from `bin`.
  1. `mv bin/hello.sh bin/say/hello.sh`
  1. `myApp say /hello /bye` This way it looks more consistent.
+
+
+Reference
+---------
+
+### Imported variables
+ 1. `root` Seed-project path.
+ 1. `userpwd` PWD where `seed` script was called.
 
 
 Tips and tricks
