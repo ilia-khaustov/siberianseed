@@ -23,4 +23,6 @@ if [ -z $newcmd ];
 git clone git@github.com:ilya-khaustov/siberianseed.git $newdir;
 cd $newdir;
 sudo ./seed --new $newcmd --owner $(whoami);
+rm -rf .git;
+mv README.md SIBERIANSEED.md;
 echo "Project $newdir created successfully";
