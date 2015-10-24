@@ -30,5 +30,5 @@ touch README.md;
 echo "# $newdir\n\n" >> README.md;
 echo "## Install\n" >> README.md;
 echo " 1. \`sudo ./seed --new $newcmd --owner \$(whoami)\`" >> README.md;
-echo " 1. \`$newcmd install\`" >> README.md;
+echo " 2. \`$newcmd install\`" >> README.md;
 echo "Project $newdir created successfully";
