@@ -35,7 +35,7 @@ for SEED_ARG in "$@"; do
   fi
 done
 if [ -n "$SEED_NEW" ]; then
-  if [ -z "$/usr/local/bin/$SEED_NEW" ]; then
+  if [ -z "/usr/local/bin/$SEED_NEW" ]; then
     echo "Creating shortcut: /usr/local/bin/$SEED_NEW";
     cmd_shebang="#!/bin/sh";
     cmd_vars="export SEED_PWD=\$PWD";
