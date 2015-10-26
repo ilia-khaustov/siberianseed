@@ -35,7 +35,9 @@ for SEED_ARG in "$@"; do
   fi
 done
 if [ -n "$SEED_NEW" ]; then
-  if [ -z "/usr/local/bin/$SEED_NEW" ]; then
+  if [ -f "/usr/local/bin/$SEED_NEW" ]; then
+    echo "File exists: /usr/local/bin/$SEED_NEW, remove it or use another shortcut";
+  else
     echo "Creating shortcut: /usr/local/bin/$SEED_NEW";
     cmd_shebang="#!/bin/sh";
     cmd_vars="export SEED_PWD=\$PWD";
@@ -44,8 +46,6 @@ if [ -n "$SEED_NEW" ]; then
     echo "$cmd_shebang\n\n$cmd_vars;\n$cmd_cd;\n$cmd_exec;" > "/usr/local/bin/$SEED_NEW";
     SEED_NAME="$SEED_NEW";
     chmod +x "/usr/local/bin/$SEED_NAME";
-  else
-    echo "File exists: /usr/local/bin/$SEED_NEW, remove it or use another shortcut";
   fi
 fi
 if [ -n "$SEED_OWNER" ]; then
