@@ -16,8 +16,10 @@ if [ -d $appname ];
     mkdir "$appname";
     mkdir -p "$root/bin/$appname";
     cp "$root/bin/"*.sh "$root/bin/$appname";
-    for task in $(ls "$root/bin/"*.sh);
-      do echo $task; echo "#!/bin/sh\n\necho '[$appname]: $task';" > "$root/bin/$appname/$task";
+    for taskfile in "$root/bin/$appname"/*
+    do
+      taskname=$(basename "$taskfile");
+      echo "#!/bin/sh\n\necho '[$appname]: $taskname';" > "$taskfile";
     done
     mkdir -p "$root/share/$appname";
     echo "App $appname created successfully";
