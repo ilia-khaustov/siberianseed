@@ -38,6 +38,7 @@ Reference
  1. `--new <project_shortcut>` Creates shortcut for system-wide access.
  1. `--owner <user>` Sets owner for shortcut file and other project files.
  1. `--name <project_shortcut> [<task> [/<subtask> ... ] ... ]` Alternative way of executing tasks, e.g. when creating system-wide shortcut is not allowed.
+ 
 ### Imported variables
  1. `root` Seed-project path.
  1. `userpwd` PWD where `seed` script was called.
