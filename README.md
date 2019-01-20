@@ -4,7 +4,7 @@ SiberianSeed
 **Minimalistic template for modular development** *from Siberia with love*
 
 
-Say hello ![Bear says hello](https://dl.dropboxusercontent.com/u/45499397/bear_says_hello.jpg)
+Say hello
 ---------
 
 SiberianSeed is probably the simpliest template ever.
